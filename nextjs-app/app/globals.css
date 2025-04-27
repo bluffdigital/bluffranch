@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+    font-family: 'Cabin';
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Branding Iron';
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background-color: #FFF8E1; /* Warm cream background */
+    color: #4A3728; /* Dark brown text */
+}
+
+h1, h2, h3 {
+    font-family: 'Cabin', 'Georgia', serif;
+    color: #355E3B; /* Muted forest green for headings */
+}
