@@ -16,14 +16,9 @@ import { settingsQuery } from "@/sanity/lib/queries";
 import { resolveOpenGraphImage } from "@/sanity/lib/utils";
 import { handleError } from "./client-utils";
 
-/**
- * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
 export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await sanityFetch({
     query: settingsQuery,
-    // Metadata should never contain stega
     stega: false,
   });
   const title = settings?.title || demo.title;
@@ -33,8 +28,8 @@ export async function generateMetadata(): Promise<Metadata> {
   let metadataBase: URL | undefined = undefined;
   try {
     metadataBase = settings?.ogImage?.metadataBase
-      ? new URL(settings.ogImage.metadataBase)
-      : undefined;
+        ? new URL(settings.ogImage.metadataBase)
+        : undefined;
   } catch {
     // ignore
   }
@@ -58,33 +53,30 @@ const inter = Inter({
 });
 
 export default async function RootLayout({
-  children,
-}: {
+                                           children,
+                                         }: {
   children: React.ReactNode;
 }) {
   const { isEnabled: isDraftMode } = await draftMode();
 
   return (
-    <html lang="en" className={`${inter.variable} bg-white text-black`}>
-      <body>
-        <section className="min-h-screen pt-24">
-          {/* The <Toaster> component is responsible for rendering toast notifications used in /app/client-utils.ts and /app/components/DraftModeToast.tsx */}
-          <Toaster />
-          {isDraftMode && (
+      <html lang="en" className={`${inter.variable} bg-white text-black`}>
+      <body className="m-0">
+      <section className="min-h-screen pt-0">
+        <Toaster />
+        {isDraftMode && (
             <>
               <DraftModeToast />
-              {/*  Enable Visual Editing, only to be rendered when Draft Mode is enabled */}
               <VisualEditing />
             </>
-          )}
-          {/* The <SanityLive> component is responsible for making all sanityFetch calls in your application live, so should always be rendered. */}
-          <SanityLive onError={handleError} />
-          <Header />
-          <main className="">{children}</main>
-          <Footer />
-        </section>
-        <SpeedInsights />
+        )}
+        <SanityLive onError={handleError} />
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </section>
+      <SpeedInsights />
       </body>
-    </html>
+      </html>
   );
 }

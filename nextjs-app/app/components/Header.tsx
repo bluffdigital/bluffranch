@@ -16,14 +16,13 @@ export default function Header() {
             <span className="text-xl font-bold">Bluff Ranch</span>
           </Link>
 
-          {/* Navigation */}
-          {/*<nav className="flex space-x-4">*/}
-          {/*  <Link href="/" className="text-white hover:text-amber-500">Home</Link>*/}
-          {/*  <Link href="/blog" className="text-white hover:text-amber-500">Blog</Link>*/}
-          {/*  <Link href="/photos" className="text-white hover:text-amber-500">Photos</Link>*/}
-          {/*  <Link href="/upload-photos" className="text-white hover:text-amber-500">Upload Photos</Link>*/}
-          {/*  <Link href="/studio" className="text-white hover:text-amber-500">Studio</Link>*/}
-          {/*</nav>*/}
+          <nav className="flex space-x-4">
+            <Link href="/" className="text-white hover:text-amber-500">Home</Link>
+            <Link href="/blog" className="text-white hover:text-amber-500">Blog</Link>
+            <Link href="/photos" className="text-white hover:text-amber-500">Photos</Link>
+            {/*<Link href="/upload-photos" className="text-white hover:text-amber-500">Upload Photos</Link>*/}
+            {/*<Link href="/studio" className="text-white hover:text-amber-500">Studio</Link>*/}
+          </nav>
         </div>
       </header>
   );
