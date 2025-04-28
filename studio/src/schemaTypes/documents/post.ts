@@ -2,11 +2,6 @@ import {DocumentTextIcon} from '@sanity/icons'
 import {format, parseISO} from 'date-fns'
 import {defineField, defineType} from 'sanity'
 
-/**
- * Post schema.  Define and edit the fields for the 'post' content type.
- * Learn more: https://www.sanity.io/docs/schema-types
- */
-
 export const post = defineType({
   name: 'post',
   title: 'Post',
@@ -57,15 +52,13 @@ export const post = defineType({
           type: 'string',
           title: 'Alternative text',
           description: 'Important for SEO and accessibility.',
-          validation: (rule) => {
-            // Custom validation to ensure alt text is provided if the image is present. https://www.sanity.io/docs/validation
-            return rule.custom((alt, context) => {
-              if ((context.document?.coverImage as any)?.asset?._ref && !alt) {
-                return 'Required'
-              }
-              return true
-            })
-          },
+          validation: (rule) =>
+              rule.custom((alt, context) => {
+                if ((context.document?.coverImage as any)?.asset?._ref && !alt) {
+                  return 'Required'
+                }
+                return true
+              }),
         },
       ],
       validation: (rule) => rule.required(),
@@ -75,6 +68,12 @@ export const post = defineType({
       title: 'Date',
       type: 'datetime',
       initialValue: () => new Date().toISOString(),
+      validation: (rule) => rule.required(),
+      options: {
+        dateFormat: 'YYYY-MM-DD',
+        timeFormat: 'HH:mm',
+        timeStep: 15,
+      },
     }),
     defineField({
       name: 'author',
@@ -83,7 +82,6 @@ export const post = defineType({
       to: [{type: 'person'}],
     }),
   ],
-  // List preview configuration. https://www.sanity.io/docs/previews-list-views
   preview: {
     select: {
       title: 'title',

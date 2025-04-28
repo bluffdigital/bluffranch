@@ -27,7 +27,7 @@ export default function CustomPortableText({
     block: {
       h1: ({ children, value }) => (
         // Add an anchor to the h1
-        <h1 className="group relative">
+        (<h1 className="group relative">
           {children}
           <a
             href={`#${value?._key}`}
@@ -48,7 +48,7 @@ export default function CustomPortableText({
               />
             </svg>
           </a>
-        </h1>
+        </h1>)
       ),
       h2: ({ children, value }) => {
         // Add an anchor to the h2

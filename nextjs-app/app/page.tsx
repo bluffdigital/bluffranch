@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import Image from 'next/image';
+import Image from "next/image";
 import {client} from "@/sanity/lib/client";
 import AllPosts from '@/app/components/AllPosts';
 import imageUrlBuilder from '@sanity/image-url';
@@ -28,13 +28,15 @@ export default async function HomePage() {
                 <Image
                     src={heroImageUrl}
                     alt="Bluff Ranch Hero"
-                    layout="fill"
-                    objectFit="cover"
-                    objectPosition="top" // Prioritize the top of the image
                     className="z-0"
                     quality={90}
                     priority
-                />
+                    fill
+                    sizes="100vw"
+                    style={{
+                        objectFit: "cover",
+                        objectPosition: "top"
+                    }} />
                 {/* Overlay for Readability */}
                 <div className="absolute inset-0 bg-black bg-opacity-50 z-10"></div>
                 {/* Title and Subtitle */}
@@ -42,12 +44,11 @@ export default async function HomePage() {
                     <h1 className="text-4xl sm:text-5xl font-bold text-white mb-4">
                         Welcome to Bluff Ranch
                     </h1>
-                    <p className="text-lg sm:text-xl text-cream-100 max-w-3xl mx-auto">
+                    <p className="text-lg sm:text-xl text-white max-w-3xl mx-auto">
                         Welcome to the Bluff Ranch blog. This will document the homestead build from land purchase to final finish nail.
                     </p>
                 </div>
             </section>
-
             {/* Posts Section */}
             <aside className="py-12 sm:py-20 bg-cream-100">
                 <Suspense fallback={<div className="text-center text-brown-600">Loading posts...</div>}>

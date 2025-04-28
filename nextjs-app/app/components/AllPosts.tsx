@@ -5,7 +5,7 @@ export default async function AllPosts() {
     const posts = await client.fetch(`*[_type == "post"] | order(publishedAt desc) {
     title,
     slug,
-    publishedAt
+    date
   }`);
 
     return (
@@ -17,7 +17,7 @@ export default async function AllPosts() {
                         <Link href={`/blog/${post.slug.current}`} className="text-amber-600 hover:text-amber-700">
                             <h3 className="text-xl font-semibold">{post.title}</h3>
                         </Link>
-                        <p className="text-sm text-brown-600">{new Date(post.publishedAt).toLocaleDateString()}</p>
+                        <p className="text-sm text-brown-600">{new Date(post.date).toLocaleDateString()}</p>
                     </div>
                 ))}
             </div>

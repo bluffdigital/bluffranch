@@ -9,8 +9,8 @@ export default function Header() {
             <svg width="100" height="100" viewBox="0 0 100 100" fill="none"
                  xmlns="http://www.w3.org/2000/svg">
               <rect width="100" height="100" fill="#654321"/>
-              <text x="10" y="60" text-align="center" text-decoration="underline" font-size="5em"
-                    fill="#FFFFFF" font-family="Branding Iron">BR
+              <text x="10" y="60" text-align="center" textDecoration="underline" fontSize="5em"
+                    fill="#FFFFFF" fontFamily="Branding Iron">BR
               </text>
             </svg>
             <span className="text-xl font-bold">Bluff Ranch</span>
