@@ -18,7 +18,7 @@
   "dependencies": {
     "@sanity/assist": "^3.2.0",
     "@sanity/icons": "^3.5.0",
-    "@sanity/vision": "^3.77.0",
+    "@sanity/vision": "^3.87.1",
     "cors": "^2.8.5",
     "date-fns": "^3.6.0",
     "googleapis": "^148.0.0",
