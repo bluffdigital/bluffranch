@@ -1,26 +1,55 @@
 import { client } from "@/sanity/lib/client";
+import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function AllPosts() {
-    const posts = await client.fetch(`*[_type == "post"] | order(publishedAt desc) {
+    const posts = await client.fetch(`*[_type == "post"] | order(date desc) {
     title,
     slug,
-    date
+    date,
+    coverImage {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    }
   }`);
 
     return (
-        <div className="max-w-7xl mx-auto">
-            <h2 className="text-2xl font-bold mb-6">Recent Blog Posts</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-3xl mx-auto">
+            <h2 className="text-2xl font-semibold text-brown-600 mb-6">Latest Blog Posts</h2>
+            <ul>
                 {posts.map((post: any) => (
-                    <div key={post.slug.current} className="border border-brown-700 p-4 rounded-lg shadow-sm bg-cream-50">
-                        <Link href={`/blog/${post.slug.current}`} className="text-amber-600 hover:text-amber-700">
-                            <h3 className="text-xl font-semibold">{post.title}</h3>
-                        </Link>
-                        <p className="text-sm text-brown-600">{new Date(post.date).toLocaleDateString()}</p>
-                    </div>
+                    <li key={post.slug.current} className="mb-4 flex items-start space-x-4">
+                        {post.coverImage?.asset?.url && (
+                            <div className="flex-shrink-0">
+                                <Image
+                                    src={post.coverImage.asset.url}
+                                    alt={post.coverImage.alt || 'Cover image'}
+                                    width={100}
+                                    height={100}
+                                    className="rounded-md object-cover"
+                                />
+                            </div>
+                        )}
+                        <div>
+                            <Link href={`/blog/${post.slug.current}`} className="text-blue-500 hover:underline text-lg font-semibold">
+                                {post.title}
+                            </Link>
+                            <p className="text-sm text-gray-500">
+                                {post.date
+                                    ? new Date(post.date).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric',
+                                    })
+                                    : 'Date not set'}
+                            </p>
+                        </div>
+                    </li>
                 ))}
-            </div>
+            </ul>
         </div>
     );
 }
