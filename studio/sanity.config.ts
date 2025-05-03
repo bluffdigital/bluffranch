@@ -48,6 +48,7 @@ function resolveHref(documentType?: string, slug?: string): string | undefined {
 
 // Main Sanity configuration
 export default defineConfig({
+  basePath: '/studio',
   name: 'default',
   title: 'Bluff Ranch',
 

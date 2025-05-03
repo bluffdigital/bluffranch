@@ -20,7 +20,7 @@
     "date-fns": "^3.6.0",
     "googleapis": "^148.0.0",
     "next": "^15.1.6",
-    "next-sanity": "^9.8.42",
+    "next-sanity": "^9.8.59",
     "node-fetch": "^3.3.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
