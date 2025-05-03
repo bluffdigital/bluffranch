@@ -82,8 +82,9 @@ export const MorePosts = async ({
 export const AllPosts = async () => {
   const { data } = await sanityFetch({ query: allPostsQuery });
 
+  // We need a 404 here
   if (!data || data.length === 0) {
-    return <OnBoarding />;
+    return;
   }
 
   return (
