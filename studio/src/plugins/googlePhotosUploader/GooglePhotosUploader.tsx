@@ -16,11 +16,14 @@ export default function GooglePhotosUploader() {
     const [message, setMessage] = useState('');
     const [accessToken, setAccessToken] = useState('');
 
+    // Use environment variable for Next.js API base URL
+    const apiBaseUrl = process.env.SANITY_STUDIO_NEXT_API_BASE_URL || 'http://localhost:3000';
+
     // Fetch Google Photos on mount
     useEffect(() => {
         const fetchPhotos = async () => {
             try {
-                const tokenResponse = await fetch('/api/google-photos-auth');
+                const tokenResponse = await fetch(`${apiBaseUrl}/api/google-photos-auth`);
                 const tokenData = await tokenResponse.json();
                 if (!tokenResponse.ok) throw new Error(tokenData.error || 'Failed to get access token');
                 setAccessToken(tokenData.accessToken);
@@ -38,7 +41,7 @@ export default function GooglePhotosUploader() {
             }
         };
         fetchPhotos();
-    }, []);
+    }, [apiBaseUrl]);
 
     const handleSelectPhoto = (id: string) => {
         setSelectedPhotos((prev) =>
@@ -51,7 +54,7 @@ export default function GooglePhotosUploader() {
         setMessage('');
         try {
             const selected = photos.filter((photo) => selectedPhotos.includes(photo.id));
-            const response = await fetch('/api/upload-photos', {
+            const response = await fetch(`${apiBaseUrl}/api/upload-photos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

@@ -1,8 +1,28 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
+import cors from 'cors';
 
-export async function GET() {
+// Initialize CORS middleware
+const corsMiddleware = cors({
+    origin: ['https://bluffranch.sanity.studio', 'http://localhost:3000'],
+    methods: ['GET'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+});
+
+// Helper to run middleware
+const runMiddleware = (req: Request, middleware: (req: any, res: any, next: (err?: any) => void) => void) =>
+    new Promise((resolve, reject) => {
+        middleware(req, { setHeader: (name: string, value: string) => req.headers.set(name, value), end: () => {} }, (err?: any) => {
+            if (err) reject(err);
+            resolve(req);
+        });
+    });
+
+export async function GET(request: Request) {
     try {
+        // Run CORS middleware
+        await runMiddleware(request, corsMiddleware);
+
         const oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_PHOTOS_CLIENT_ID,
             process.env.GOOGLE_PHOTOS_CLIENT_SECRET,

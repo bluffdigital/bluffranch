@@ -1,8 +1,28 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
+import cors from 'cors';
+
+// Initialize CORS middleware
+const corsMiddleware = cors({
+    origin: ['https://bluffranch.sanity.studio', 'http://localhost:3000'],
+    methods: ['GET'],
+    allowedHeaders: ['Content-Type'],
+});
+
+// Helper to run middleware
+const runMiddleware = (req: Request, middleware: (req: any, res: any, next: (err?: any) => void) => void) =>
+    new Promise((resolve, reject) => {
+        middleware(req, { setHeader: (name: string, value: string) => req.headers.set(name, value), end: () => {} }, (err?: any) => {
+            if (err) reject(err);
+            resolve(req);
+        });
+    });
 
 export async function GET(request: Request) {
     try {
+        // Run CORS middleware
+        await runMiddleware(request, corsMiddleware);
+
         const url = new URL(request.url);
         const code = url.searchParams.get('code');
         if (!code) {

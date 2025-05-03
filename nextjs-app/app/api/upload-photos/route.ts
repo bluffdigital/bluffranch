@@ -2,9 +2,29 @@ import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client';
 import sharp from 'sharp';
 import fetch from 'node-fetch';
+import cors from 'cors';
+
+// Initialize CORS middleware
+const corsMiddleware = cors({
+    origin: ['https://bluffranch.sanity.studio', 'http://localhost:3000'],
+    methods: ['POST'],
+    allowedHeaders: ['Content-Type'],
+});
+
+// Helper to run middleware
+const runMiddleware = (req: NextRequest, middleware: (req: any, res: any, next: (err?: any) => void) => void) =>
+    new Promise((resolve, reject) => {
+        middleware(req, { setHeader: (name: string, value: string) => req.headers.set(name, value), end: () => {} }, (err?: any) => {
+            if (err) reject(err);
+            resolve(req);
+        });
+    });
 
 export async function POST(request: NextRequest) {
     try {
+        // Run CORS middleware
+        await runMiddleware(request, corsMiddleware);
+
         const { photos, accessToken } = await request.json();
         if (!photos || !Array.isArray(photos) || photos.length === 0) {
             return NextResponse.json({ error: 'No photos provided' }, { status: 400 });
