@@ -16,6 +16,8 @@ import {
   type DocumentLocation,
 } from 'sanity/presentation'
 import {assist} from '@sanity/assist'
+import { googlePhotosUploader } from './src/plugins/googlePhotosUploader';
+
 
 // Environment variables for project configuration
 const projectId = process.env.SANITY_STUDIO_PROJECT_ID || 'yhzkta6y'
@@ -124,6 +126,7 @@ export default defineConfig({
     unsplashImageAsset(),
     assist(),
     visionTool(),
+    googlePhotosUploader(),
   ],
 
   // Schema configuration, imported from ./src/schemaTypes/index.ts

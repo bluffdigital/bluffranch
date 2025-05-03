@@ -22,5 +22,5 @@ export const schemaTypes = [
   infoSection,
   callToAction,
   link,
-  photo,
+  photo
 ]

@@ -4,7 +4,6 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { morePostsQuery, allPostsQuery } from "@/sanity/lib/queries";
 import { Post as PostType } from "@/sanity.types";
 import DateComponent from "@/app/components/Date";
-import OnBoarding from "@/app/components/Onboarding";
 
 const Post = ({ post }: { post: PostType }) => {
   const { _id, title, slug, excerpt, date } = post;
