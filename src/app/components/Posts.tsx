@@ -1,0 +1,129 @@
+import Link from "next/link";
+import { fetchPosts } from '@/sanity/lib/sanityClient';
+import { Post } from '@/sanity/lib/sanityTypes';
+import DateComponent from "@/app/components/Date";
+
+const PostComponent = ({ post }: { post: Post }) => {
+    const { _id, title, slug, date } = post;
+
+    return (
+        <article
+            key={_id}
+            className="flex max-w-xl flex-col items-start justify-between"
+        >
+            <div className="text-white text-sm">
+                <DateComponent dateString={date} />
+            </div>
+
+            <h3 className="mt-3 text-2xl font-semibold">
+                <Link
+                    className="text-white hover:text-red-300 underline transition-colors"
+                    href={`/posts/${slug.current}`}
+                >
+                    {title}
+                </Link>
+            </h3>
+            <p className="mt-5 line-clamp-3 text-sm leading-6 text-white">
+                {/*{excerpt}*/}
+            </p>
+        </article>
+    );
+};
+
+const Posts = ({
+                   children,
+                   heading,
+                   subHeading,
+               }: {
+    children: React.ReactNode;
+    heading?: string;
+    subHeading?: string;
+}) => (
+    <div>
+        {heading && (
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
+                {heading}
+            </h2>
+        )}
+        {subHeading && (
+            <p className="mt-2 text-lg leading-8 text-white">{subHeading}</p>
+        )}
+        <div className="mt-6 pt-6 space-y-12 border-t border-gray-200">
+            {children}
+        </div>
+    </div>
+);
+
+export const MorePosts = async ({
+                                    skip,
+                                    limit,
+                                }: {
+    skip: string;
+    limit: number;
+}) => {
+    const data = await fetchPosts(
+        `*[_type == "post" && _id != $skip] | order(date desc) [0...$limit] {
+      _id,
+      title,
+      slug { current },
+      excerpt,
+      date,
+      coverImage {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    }`,
+        { skip, limit },
+        {}
+    );
+
+    if (!data || data.length === 0) {
+        return null;
+    }
+
+    return (
+        <Posts heading={`Recent Posts (${data.length})`}>
+            {data.map((post) => <PostComponent key={post._id} post={post} />)}
+        </Posts>
+    );
+};
+
+export const AllPosts = async () => {
+    const data = await fetchPosts(
+        `*[_type == "post"] | order(date desc) {
+      _id,
+      title,
+      slug { current },
+      excerpt,
+      date,
+      coverImage {
+        asset->{
+          _id,
+          url
+        },
+        alt
+      }
+    }`,
+        {},
+        {}
+    );
+
+    // We need a 404 here
+    if (!data || data.length === 0) {
+        return;
+    }
+
+    return (
+        <Posts
+            heading="Recent Posts"
+            subHeading={`${data.length === 1 ? "This blog post is" : `These ${data.length} blog posts are`} populated from your Sanity Studio.`}
+        >
+            {data.map((post) => (
+                <PostComponent key={post._id} post={post} />
+            ))}
+        </Posts>
+    );
+};
