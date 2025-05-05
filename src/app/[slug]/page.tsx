@@ -1,72 +1,71 @@
-import type { Metadata } from "next";
-import Head from "next/head";
+import { fetchPhoto, fetchPhotoSlugs } from '../../../lib/sanityClient';
+import Image from 'next/image';
+import { notFound } from 'next/navigation';
 
-import PageBuilderPage from "@/app/components/PageBuilder";
-import { fetchPage, fetchPageSlugs } from "@/sanity/lib/sanityClient";
-import { getPageQuery, pagesSlugs } from "@/sanity/lib/queries";
-
-type Props = {
-  params: Promise<{ slug: string }>;
-};
-
-/**
- * Generate the static params for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-static-params
- */
 export async function generateStaticParams() {
-  const data = await fetchPageSlugs(pagesSlugs, {
-    perspective: "published",
-    stega: false,
-  });
-  return data.map((slug) => ({ slug }));
+  const slugs = await fetchPhotoSlugs(`*[_type == "photo"].slug.current`);
+  return slugs.map((slug) => ({ slug }));
 }
 
-/**
- * Generate metadata for the page.
- * Learn more: https://nextjs.org/docs/app/api-reference/functions/generate-metadata#generatemetadata-function
- */
-export async function generateMetadata(props: Props): Promise<Metadata> {
+export default async function PhotoPage(props: { params: Promise<{ slug: string }> }) {
   const params = await props.params;
-  const page = await fetchPage(getPageQuery, params);
+  const photo = await fetchPhoto(`*[_type == "photo" && slug.current == $slug][0] {
+    _id,
+    title,
+    image {
+      asset->{
+        _id,
+        url
+      }
+    },
+    googlePhotoUrl,
+    uploadedAt
+  }`, { slug: params.slug });
 
-  return {
-    title: page?.name,
-    description: page?.heading,
-  } satisfies Metadata;
-}
-
-export default async function Page(props: Props) {
-  const params = await props.params;
-  const page = await fetchPage(getPageQuery, params);
-
-  if (!page?._id) {
-    return (
-        <div className="py-40">
-          {/* Placeholder for not found state */}
-        </div>
-    );
+  if (!photo) {
+    notFound();
   }
 
   return (
-      <div className="my-12 lg:my-24">
-        <Head>
-          <title>{page.heading}</title>
-        </Head>
-        <div className="">
-          <div className="container">
-            <div className="pb-6 border-b border-gray-100">
-              <div className="max-w-3xl">
-                <h2 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-7xl">
-                  {page.heading}
-                </h2>
-                <p className="mt-4 text-base lg:text-lg leading-relaxed text-gray-600 uppercase font-light">
-                  {page.subheading}
-                </p>
+      <div className="min-h-screen bg-gray-100 pt-8 px-8 pb-8">
+        <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-2xl font-bold mb-6">{photo.title || 'Untitled Photo'}</h1>
+          {photo.image?.asset?.url ? (
+              <div className="mb-6">
+                <Image
+                    src={photo.image.asset.url}
+                    alt={photo.title || 'Uploaded photo'}
+                    width={800}
+                    height={600}
+                    className="w-full h-auto rounded-lg object-cover"
+                    priority
+                />
               </div>
-            </div>
-          </div>
+          ) : (
+              <div className="w-full h-96 bg-gray-200 flex items-center justify-center mb-6">
+                <span className="text-gray-500">No image available</span>
+              </div>
+          )}
+          <p className="text-sm text-gray-500 mb-4">
+            Uploaded on: {photo.uploadedAt
+              ? new Date(photo.uploadedAt).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })
+              : 'Date not set'}
+          </p>
+          {photo.googlePhotoUrl && (
+              <a
+                  href={photo.googlePhotoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 text-sm hover:underline"
+              >
+                View on Google Photos
+              </a>
+          )}
         </div>
-        <PageBuilderPage page={page} />
       </div>
   );
 }
