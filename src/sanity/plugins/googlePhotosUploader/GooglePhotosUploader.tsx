@@ -35,7 +35,6 @@ export default function GooglePhotosUploader() {
                 if (!response.ok) throw new Error(data.error?.message || 'Failed to fetch photos');
                 setPhotos(data.mediaItems || []);
             } catch (error) {
-                // @ts-ignore
                 setMessage(`Error fetching photos: ${error.message}`);
             } finally {
                 setIsLoading(false);
@@ -73,7 +72,6 @@ export default function GooglePhotosUploader() {
             setMessage(`Successfully uploaded ${selected.length} photos!`);
             setSelectedPhotos([]);
         } catch (error) {
-            // @ts-ignore
             setMessage(`Error uploading photos: ${error.message}`);
         } finally {
             setIsUploading(false);

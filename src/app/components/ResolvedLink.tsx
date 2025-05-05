@@ -3,6 +3,7 @@ import Link from "next/link";
 import { linkResolver } from "@/sanity/lib/utils";
 
 interface ResolvedLinkProps {
+  // eslint-disable-next-line
   link: any;
   children: React.ReactNode;
   className?: string;

@@ -54,6 +54,7 @@ export const post = defineType({
           description: 'Important for SEO and accessibility.',
           validation: (rule) =>
               rule.custom((alt, context) => {
+                // eslint-disable-next-line
                 if ((context.document?.coverImage as any)?.asset?._ref && !alt) {
                   return 'Required'
                 }

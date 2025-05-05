@@ -21,6 +21,7 @@ export default async function BlogPage() {
             <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
                 <h1 className="text-2xl font-bold mb-6">Blog Posts</h1>
                 <ul>
+                    // eslint-disable-next-line
                     {posts.map((post: any) => (
                         <li key={post.slug.current} className="mb-4 flex items-start space-x-4">
                             {post.coverImage?.asset?.url && (

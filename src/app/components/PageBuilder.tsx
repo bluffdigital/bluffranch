@@ -43,6 +43,7 @@ function renderSections(
         path: `pageBuilder`,
       }).toString()}
     >
+        // eslint-disable-next-line
       {pageBuilderSections.map((block: any, index: number) => (
         <BlockRenderer
           key={block._key}

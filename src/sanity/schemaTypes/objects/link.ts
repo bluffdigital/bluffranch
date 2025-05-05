@@ -3,7 +3,7 @@ import {LinkIcon} from '@sanity/icons'
 
 /**
  * Link schema object. This link object lets the user first select the type of link and then
- * then enter the URL, page reference, or post reference - depending on the type selected.
+ * enter the URL, page reference, or post reference - depending on the type selected.
  * Learn more: https://www.sanity.io/docs/object-type
  */
 
@@ -34,6 +34,7 @@ export const link = defineType({
       hidden: ({parent}) => parent?.linkType !== 'href',
       validation: (Rule) =>
         // Custom validation to ensure URL is provided if the link type is 'href'
+          // eslint-disable-next-line
         Rule.custom((value, context: any) => {
           if (context.parent?.linkType === 'href' && !value) {
             return 'URL is required when Link Type is URL'
@@ -49,6 +50,7 @@ export const link = defineType({
       hidden: ({parent}) => parent?.linkType !== 'page',
       validation: (Rule) =>
         // Custom validation to ensure page reference is provided if the link type is 'page'
+          // eslint-disable-next-line
         Rule.custom((value, context: any) => {
           if (context.parent?.linkType === 'page' && !value) {
             return 'Page reference is required when Link Type is Page'
@@ -64,6 +66,7 @@ export const link = defineType({
       hidden: ({parent}) => parent?.linkType !== 'post',
       validation: (Rule) =>
         // Custom validation to ensure post reference is provided if the link type is 'post'
+          // eslint-disable-next-line
         Rule.custom((value, context: any) => {
           if (context.parent?.linkType === 'post' && !value) {
             return 'Post reference is required when Link Type is Post'

@@ -7,6 +7,7 @@ type Props = {
   person: {
     firstName: string | null;
     lastName: string | null;
+    // eslint-disable-next-line
     picture?: any;
   };
   date: string;

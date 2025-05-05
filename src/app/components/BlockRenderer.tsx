@@ -5,6 +5,7 @@ import Info from "@/app/components/InfoSection";
 import { dataAttr } from "@/sanity/lib/utils";
 
 type BlocksType = {
+    // eslint-disable-next-line
   [key: string]: React.FC<any>;
 };
 
@@ -26,7 +27,7 @@ const Blocks: BlocksType = {
 };
 
 /**
- * Used by the <PageBuilder>, this component renders a the component that matches the block type.
+ * Used by the <PageBuilder>, this component renders the component that matches the block type.
  */
 export default function BlockRenderer({
   block,

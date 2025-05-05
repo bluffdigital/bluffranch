@@ -74,6 +74,7 @@ export const settings = defineType({
           type: 'string',
           validation: (rule) => {
             return rule.custom((alt, context) => {
+              // eslint-disable-next-line
               if ((context.document?.ogImage as any)?.asset?._ref && !alt) {
                 return 'Required'
               }

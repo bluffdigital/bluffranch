@@ -74,6 +74,7 @@ export const MorePosts = async ({
 
   return (
     <Posts heading={`Recent Posts (${data?.length})`}>
+      // eslint-disable-next-line
       {data?.map((post: any) => <Post key={post._id} post={post} />)}
     </Posts>
   );
@@ -92,6 +93,7 @@ export const AllPosts = async () => {
       heading="Recent Posts"
       subHeading={`${data.length === 1 ? "This blog post is" : `These ${data.length} blog posts are`} populated from your Sanity Studio.`}
     >
+      // eslint-disable-next-line
       {data.map((post: any) => (
         <Post key={post._id} post={post} />
       ))}

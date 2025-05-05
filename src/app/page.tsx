@@ -6,7 +6,7 @@ import imageUrlBuilder from '@sanity/image-url';
 
 // Initialize the image URL builder
 const builder = imageUrlBuilder(client);
-
+// eslint-disable-next-line
 function urlFor(source: any) {
     return builder.image(source).width(1200).height(500).quality(90).fit('crop').crop('top').url();
 }

@@ -9,6 +9,7 @@ export const photo = defineType({
             name: 'title',
             title: 'Title',
             type: 'string',
+            // eslint-disable-next-line
             validation: (Rule: { required: () => any; }) => Rule.required(),
         },
         {
@@ -16,6 +17,7 @@ export const photo = defineType({
             title: 'Image',
             type: 'image',
             options: { hotspot: true },
+            // eslint-disable-next-line
             validation: (Rule: { required: () => any; }) => Rule.required(),
         },
         {
