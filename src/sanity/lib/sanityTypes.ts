@@ -37,7 +37,18 @@ export interface Photo {
 export interface PageBuilderSection {
     _key: string;
     _type: string;
-    [key: string]: any; // Allow additional properties for flexibility
+    // Define common block properties, with flexibility for others
+    title?: string;
+    content?: Array<{
+        _type: 'block';
+        children: Array<{
+            _type: 'span';
+            text: string;
+            marks: string[];
+        }>;
+    }>;
+    image?: SanityImage;
+    [key: string]: string | number | boolean | SanityImage | Array<{ _type: string; [key: string]: unknown }> | undefined;
 }
 
 export interface Page {
