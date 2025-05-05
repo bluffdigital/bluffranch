@@ -48,9 +48,6 @@ export const person = defineType({
       ],
       options: {
         hotspot: true,
-        aiAssist: {
-          imageDescriptionField: 'alt',
-        },
       },
       validation: (rule) => rule.required(),
     }),
