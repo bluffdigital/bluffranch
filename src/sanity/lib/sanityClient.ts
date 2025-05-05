@@ -1,6 +1,6 @@
 import { createClient } from 'next-sanity';
 import type { QueryParams } from '@sanity/client';
-import type { Post, Photo } from './sanityTypes';
+import type { Post, Photo, Page } from './sanityTypes';
 
 // Create a typed Sanity client
 export const client = createClient({
@@ -25,5 +25,13 @@ export const fetchPhotos = async (query: string, params: QueryParams = {}): Prom
 };
 
 export const fetchPhoto = async (query: string, params: QueryParams = {}): Promise<Photo | null> => {
+    return client.fetch(query, params);
+};
+
+export const fetchPage = async (query: string, params: QueryParams = {}): Promise<Page | null> => {
+    return client.fetch(query, params);
+};
+
+export const fetchPageSlugs = async (query: string, params: QueryParams = {}): Promise<string[]> => {
     return client.fetch(query, params);
 };

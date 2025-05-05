@@ -34,11 +34,31 @@ export interface Photo {
     uploadedAt: string;
 }
 
-export interface PageBuilderSection {
+export interface Slug {
+    _type: 'slug';
+    current: string;
+}
+
+export interface CallToActionBlock {
     _key: string;
-    _type: string;
-    title?: string;
-    content?: Array<{
+    _type: 'callToAction';
+    heading: string;
+    text?: string;
+    buttonText?: string;
+    link: {
+        _type: 'reference' | 'link';
+        url?: string;
+        reference?: {
+            _ref: string;
+            _type: 'reference';
+        };
+    };
+}
+
+export interface ContentBlock {
+    _key: string;
+    _type: 'content';
+    content: Array<{
         _type: 'block';
         children: Array<{
             _type: 'span';
@@ -46,12 +66,16 @@ export interface PageBuilderSection {
             marks: string[];
         }>;
     }>;
-    image?: SanityImage;
-    [key: string]: string | number | boolean | SanityImage | Array<{ _type: string; [key: string]: unknown }> | undefined;
 }
+
+export type PageBuilderSection = CallToActionBlock | ContentBlock;
 
 export interface Page {
     _id: string;
-    _type: string;
+    _type: 'page';
+    name: string;
+    slug: Slug;
+    heading: string;
+    subheading: string;
     pageBuilder?: PageBuilderSection[];
 }
