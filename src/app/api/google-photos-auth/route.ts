@@ -1,28 +1,14 @@
 import { NextResponse } from 'next/server';
 import { google } from 'googleapis';
-import cors from 'cors';
-
-// Initialize CORS middleware
-const corsMiddleware = cors({
-    origin: ['https://bluffranch.sanity.studio', 'http://localhost:3000'],
-    methods: ['GET'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-});
-
-// Helper to run middleware
-const runMiddleware = (req: Request, middleware: (req: any, res: any, next: (err?: any) => void) => void) =>
-    new Promise((resolve, reject) => {
-        middleware(req, { setHeader: (name: string, value: string) => req.headers.set(name, value), end: () => {} }, (err?: any) => {
-            if (err) reject(err);
-            resolve(req);
-        });
-    });
 
 export async function GET(request: Request) {
-    try {
-        // Run CORS middleware
-        await runMiddleware(request, corsMiddleware);
+    // Set CORS headers
+    const headers = new Headers();
+    headers.set('Access-Control-Allow-Origin', request.headers.get('origin') === 'https://bluffranch.sanity.studio' ? 'https://bluffranch.sanity.studio' : 'http://localhost:3000');
+    headers.set('Access-Control-Allow-Methods', 'GET');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
+    try {
         const oauth2Client = new google.auth.OAuth2(
             process.env.GOOGLE_PHOTOS_CLIENT_ID,
             process.env.GOOGLE_PHOTOS_CLIENT_SECRET,
@@ -36,9 +22,9 @@ export async function GET(request: Request) {
 
         oauth2Client.setCredentials({ refresh_token: refreshToken });
         const { credentials } = await oauth2Client.refreshAccessToken();
-        return NextResponse.json({ accessToken: credentials.access_token });
+        return NextResponse.json({ accessToken: credentials.access_token }, { headers });
     } catch (error) {
         console.error('Error retrieving access token:', error);
-        return NextResponse.json({ error: 'Failed to get access token' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to get access token' }, { status: 500, headers });
     }
 }

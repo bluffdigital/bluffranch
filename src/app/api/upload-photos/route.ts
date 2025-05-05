@@ -2,32 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { client } from '@/sanity/lib/client';
 import sharp from 'sharp';
 import fetch from 'node-fetch';
-import cors from 'cors';
-
-// Initialize CORS middleware
-const corsMiddleware = cors({
-    origin: ['https://bluffranch.sanity.studio', 'http://localhost:3000'],
-    methods: ['POST'],
-    allowedHeaders: ['Content-Type'],
-});
-
-// Helper to run middleware
-const runMiddleware = (req: NextRequest, middleware: (req: any, res: any, next: (err?: any) => void) => void) =>
-    new Promise((resolve, reject) => {
-        middleware(req, { setHeader: (name: string, value: string) => req.headers.set(name, value), end: () => {} }, (err?: any) => {
-            if (err) reject(err);
-            resolve(req);
-        });
-    });
 
 export async function POST(request: NextRequest) {
-    try {
-        // Run CORS middleware
-        await runMiddleware(request, corsMiddleware);
+    // Set CORS headers
+    const headers = new Headers();
+    headers.set('Access-Control-Allow-Origin', request.headers.get('origin') === 'https://bluffranch.sanity.studio' ? 'https://bluffranch.sanity.studio' : 'http://localhost:3000');
+    headers.set('Access-Control-Allow-Methods', 'POST');
+    headers.set('Access-Control-Allow-Headers', 'Content-Type');
 
+    try {
         const { photos, accessToken } = await request.json();
         if (!photos || !Array.isArray(photos) || photos.length === 0) {
-            return NextResponse.json({ error: 'No photos provided' }, { status: 400 });
+            return NextResponse.json({ error: 'No photos provided' }, { status: 400, headers });
         }
 
         const uploadedPhotos = [];
@@ -71,9 +57,9 @@ export async function POST(request: NextRequest) {
             uploadedPhotos.push(photoDoc);
         }
 
-        return NextResponse.json({ message: `Uploaded ${uploadedPhotos.length} photos` }, { status: 201 });
+        return NextResponse.json({ message: `Uploaded ${uploadedPhotos.length} photos` }, { status: 201, headers });
     } catch (error) {
         console.error('Error uploading photos:', error);
-        return NextResponse.json({ error: 'Failed to upload photos' }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to upload photos' }, { status: 500, headers });
     }
 }
