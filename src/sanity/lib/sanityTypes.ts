@@ -33,3 +33,15 @@ export interface Photo {
     googlePhotoUrl: string;
     uploadedAt: string;
 }
+
+export interface PageBuilderSection {
+    _key: string;
+    _type: string;
+    [key: string]: any; // Allow additional properties for flexibility
+}
+
+export interface Page {
+    _id: string;
+    _type: string;
+    pageBuilder?: PageBuilderSection[];
+}

@@ -1,4 +1,4 @@
-import { fetchPhotos } from '@/sanity/lib/sanityClient';
+import { fetchPhotos } from "@/sanity/lib/sanityClient";
 import Image from 'next/image';
 
 export default async function PhotosPage() {
