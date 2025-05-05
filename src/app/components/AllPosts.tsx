@@ -1,9 +1,9 @@
-import { client } from "@/sanity/lib/client";
+import { fetchPosts } from '@/sanity/lib/sanityClient';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export default async function AllPosts() {
-    const posts = await client.fetch(`*[_type == "post"] | order(date desc) {
+    const posts = await fetchPosts(`*[_type == "post"] | order(date desc) {
     title,
     slug,
     date,
@@ -20,8 +20,7 @@ export default async function AllPosts() {
         <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-semibold text-brown-600 mb-6">Latest Blog Posts</h2>
             <ul>
-                // eslint-disable-next-line
-                {posts.map((post: any) => (
+                {posts.map((post) => (
                     <li key={post.slug.current} className="mb-4 flex items-start space-x-4">
                         {post.coverImage?.asset?.url && (
                             <div className="flex-shrink-0">

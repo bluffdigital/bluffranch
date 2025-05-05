@@ -1,15 +1,15 @@
-import {client} from "@/sanity/lib/client";
+import {fetchPost, fetchPosts} from '@/sanity/lib/sanityClient';
 import { PortableText } from 'next-sanity';
 import Image from 'next/image';
 
 export async function generateStaticParams() {
-    const slugs = await client.fetch(`*[_type == "post"].slug.current`);
-    return slugs.map((slug: string) => ({ slug }));
+    const slugs = await fetchPosts(`*[_type == "post"].slug.current`);
+    return slugs.map((slug) => ({ slug }));
 }
 
 export default async function PostPage(props: { params: Promise<{ slug: string }> }) {
     const params = await props.params;
-    const post = await client.fetch(`*[_type == "post" && slug.current == $slug][0] {
+    const post = await fetchPost(`*[_type == "post" && slug.current == $slug][0] {
     title,
     content,
     date,
@@ -28,7 +28,7 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
 
     return (
         <div className="min-h-screen bg-gray-100 p-8">
-            <div className="max-w-3xl lingered:mx-auto bg-white p-6 rounded-lg shadow-md">
+            <div className="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
                 {post.coverImage?.asset?.url && (
                     <div className="mb-6">
                         <Image

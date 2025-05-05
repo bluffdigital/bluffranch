@@ -1,8 +1,8 @@
-import {client} from "@/sanity/lib/client";
+import { fetchPhotos } from '@/sanity/lib/sanityClient';
 import Image from 'next/image';
 
 export default async function PhotosPage() {
-    const photos = await client.fetch(`*[_type == "photo"] | order(uploadedAt desc) {
+    const photos = await fetchPhotos(`*[_type == "photo"] | order(uploadedAt desc) {
     _id,
     title,
     image {
@@ -23,8 +23,7 @@ export default async function PhotosPage() {
                     <p className="text-gray-500">No photos have been uploaded yet.</p>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        // eslint-disable-next-line
-                        {photos.map((photo: any) => (
+                        {photos.map((photo) => (
                             <div key={photo._id} className="border rounded-lg overflow-hidden shadow-sm">
                                 {photo.image?.asset?.url ? (
                                     <Image

@@ -18,6 +18,7 @@ export default async function PhotosPage() {
                     <p className="text-gray-500">No photos available.</p>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        // eslint-disable-next-line
                         {photos.map((photo: any) => (
                             <div key={photo._id} className="border p-4 rounded-md">
                                 {photo.image?.asset?.url ? (

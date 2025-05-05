@@ -21,7 +21,7 @@ export default function Header() {
                   <ellipse cx="155" cy="210" rx="15" ry="10" fill="#FFCCBC"/>
                   <circle cx="165" cy="205" r="5" fill="#FF5722"/>
                   <circle cx="160" cy="200" r="2" fill="#000"/>
-                  <polyline points="130,230 140,245 150,230" fill="none" stroke="#FF5722" stroke-width="2"/>
+                  <polyline points="130,230 140,245 150,230" fill="none" stroke="#FF5722" strokeWidth="2"/>
               </svg>
             <span className="text-xl font-bold">Bluff Ranch</span>
           </Link>
