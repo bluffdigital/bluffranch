@@ -37,7 +37,6 @@ export interface Photo {
 export interface PageBuilderSection {
     _key: string;
     _type: string;
-    // Define common block properties, with flexibility for others
     title?: string;
     content?: Array<{
         _type: 'block';
